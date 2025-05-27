@@ -1,7 +1,7 @@
 import pytest
 from findrum.interfaces import DataSource
-from findrum.engine.PipelineRunner import PipelineRunner
-from findrum.registry.Registry import DATASOURCE_REGISTRY
+from findrum.engine.pipeline_runner import PipelineRunner
+from findrum.registry.registry import DATASOURCE_REGISTRY
 
 class IncompleteDataSource(DataSource):
     pass

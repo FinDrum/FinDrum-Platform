@@ -1,4 +1,4 @@
-from findrum.engine.Platform import Platform
+from findrum.engine.platform import Platform
 import argparse
 import sys
 import os

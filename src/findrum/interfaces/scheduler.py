@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import logging
 logger = logging.getLogger("findrum")
-from findrum.engine.PipelineRunner import PipelineRunner
+from findrum.engine.pipeline_runner import PipelineRunner
 
 class Scheduler(ABC):
     def __init__(self, config, pipeline_path):

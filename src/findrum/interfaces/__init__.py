@@ -1,7 +1,7 @@
-from findrum.interfaces.Operator import Operator
-from findrum.interfaces.Scheduler import Scheduler
-from findrum.interfaces.EventTrigger import EventTrigger
-from findrum.interfaces.DataSource import DataSource
+from .operator import Operator
+from .scheduler import Scheduler
+from .event_trigger import EventTrigger
+from .data_source import DataSource
 
 __all__ = [
     "Operator",

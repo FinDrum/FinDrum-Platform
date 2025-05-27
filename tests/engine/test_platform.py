@@ -5,8 +5,8 @@ import tempfile
 import os
 from unittest.mock import patch, MagicMock
 
-from findrum.registry.Registry import EVENT_TRIGGER_REGISTRY, SCHEDULER_REGISTRY
-from findrum.engine.Platform import Platform
+from findrum.registry.registry import EVENT_TRIGGER_REGISTRY, SCHEDULER_REGISTRY
+from findrum.engine.platform import Platform
 
 class DummyTrigger:
     def __init__(self, config, pipeline_path): pass
@@ -50,12 +50,12 @@ def test_register_pipeline_run_directly(temp_pipeline_file):
         yaml.dump(pipeline_data, f)
 
     platform = Platform(extensions_config=temp_pipeline_file)
-    with patch("findrum.engine.PipelineRunner.PipelineRunner.run") as mock_run:
+    with patch("findrum.engine.pipeline_runner.PipelineRunner.run") as mock_run:
         platform.register_pipeline(temp_pipeline_file)
         mock_run.assert_called_once()
 
 def test_register_pipeline_missing_file():
-    with patch("findrum.engine.Platform.load_extensions", return_value=None):
+    with patch("findrum.engine.platform.load_extensions", return_value=None):
         platform = Platform(extensions_config="nonexistent.yaml")
         with pytest.raises(FileNotFoundError):
             platform.register_pipeline("nonexistent_pipeline.yaml")
@@ -76,7 +76,7 @@ def test_register_pipeline_invalid_scheduler(temp_pipeline_file):
     with pytest.raises(ValueError, match="Scheduler 'missing' not registered"):
         platform.register_pipeline(temp_pipeline_file)
 
-@patch("findrum.engine.Platform.load_extensions", return_value=None)
+@patch("findrum.engine.platform.load_extensions", return_value=None)
 def test_platform_start(_, caplog):
     platform = Platform(extensions_config="dummy.yaml")
     platform.scheduler = MagicMock()

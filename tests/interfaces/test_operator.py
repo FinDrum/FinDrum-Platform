@@ -1,5 +1,5 @@
 import pytest
-from findrum.interfaces.Operator import Operator
+from findrum.interfaces.operator import Operator
 
 class IncompleteOperator(Operator):
     def run(self, input_data):
