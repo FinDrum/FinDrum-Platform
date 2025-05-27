@@ -1,0 +1,10 @@
+operators:
+  - operators.my_operators.SaveToCSVOperator
+  - operators.my_operators.PrintCSVOperator
+  - operators.my_sources.CustomDataSource
+
+schedulers:
+  - schedulers.my_schedulers.Every10SecondsScheduler
+
+triggers:
+  - triggers.my_triggers.LocalFileTrigger

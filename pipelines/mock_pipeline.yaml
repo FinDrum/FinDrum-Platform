@@ -1,0 +1,12 @@
+scheduler:
+  type: Every10SecondsScheduler
+
+pipeline:
+  - id: fetch
+    operator: CustomDataSource
+
+  - id: save
+    operator: SaveToCSVOperator
+    depends_on: fetch
+    params:
+      path_output: output.csv

@@ -1,0 +1,11 @@
+event:
+  type: LocalFileTrigger
+  config:
+    path: .
+    suffix: .csv
+
+pipeline:
+  - id: load
+    operator: PrintCSVOperator
+    params:
+      path_input: output.csv

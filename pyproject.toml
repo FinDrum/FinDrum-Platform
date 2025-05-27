@@ -1,0 +1,28 @@
+[project]
+name = "findrum"
+version = "0.1.0"
+description = "Framework for building modular, event-driven data pipelines"
+authors = [
+  { name = "Óscar", email = "oscar.rico101@alu.ulpgc.es" }
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "APScheduler==3.11.0",
+  "pandas==2.2.3",
+  "PyYAML==6.0.2",
+  "python-dateutil==2.9.0.post0"
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+findrum-run = "findrum.__main__:main"
