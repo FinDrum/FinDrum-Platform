@@ -85,6 +85,12 @@ def test_platform_start(_, caplog):
         platform.start()
 
     platform.scheduler.start.assert_called_once()
-    assert "🔁 Starting..." in caplog.text
+    assert "🔁 Starting scheduler..." in caplog.text
 
+@patch("findrum.engine.platform.load_extensions", return_value=None)
+def test_platform_does_not_block_without_jobs(_,caplog):
+    platform = Platform("config.yaml")
+    with caplog.at_level(logging.INFO):
+        platform.start()
+    assert "No scheduled jobs" in caplog.text
 
