@@ -19,6 +19,7 @@ pip install findrum-platform
 Findrum pipelines are defined in YAML files and can include:
 
 - A sequence of operators
+- A datasource (provides data from external source)
 - A scheduler (to run periodically)
 - An event trigger (to respond to changes)
 
@@ -30,7 +31,12 @@ scheduler:
 
 pipeline:
   - id: step1
+    datasource: MyDataSource
+    params:
+      key: value
+  - id: step2
     operator: MyOperator
+    depends_on: step1
     params:
       key: value
 ```
@@ -144,7 +150,7 @@ operators:
   - my_project.operators.MyCustomOperator
 
 datasources:
-  - my_project.sources.MySource
+  - my_project.datasources.MyDataSource
 
 schedulers:
   - my_project.schedulers.MyScheduler
@@ -167,6 +173,8 @@ platform.register_pipeline("pipelines/my_pipeline.yaml")
 platform.start()
 ```
 
+You can also run your pipelines from a python file (like main.py for example) following the example above.
+
 ---
 
 ## Clean Project Structure
@@ -181,6 +189,8 @@ your-project/
 │   └── my_scheduler.py
 ├── triggers/
 │   └── my_trigger.py
+├── datasources/
+│   └── my_datasource.py
 ├── pipelines/
 │   └── my_pipeline.yaml
 ├── config.yaml
