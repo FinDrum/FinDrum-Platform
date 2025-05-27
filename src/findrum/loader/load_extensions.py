@@ -7,6 +7,7 @@ CATEGORY_REGISTRY_MAP = {
     "operators": Registry.OPERATOR_REGISTRY,
     "schedulers": Registry.SCHEDULER_REGISTRY,
     "triggers": Registry.EVENT_TRIGGER_REGISTRY,
+    "datasources": Registry.DATASOURCE_REGISTRY,
 }
 
 def load_extensions(config_path: str):

@@ -1,6 +1,7 @@
 import yaml
 import os
 import logging
+logger = logging.getLogger("findrum")
 import threading
 from apscheduler.schedulers.blocking import BlockingScheduler
 
@@ -27,7 +28,7 @@ class Platform:
         elif "scheduler" in config:
             self._register_scheduler(config["scheduler"], pipeline_path)
         else:
-            logging.info(f"🚀 Starting pipeline: {pipeline_path}")
+            logger.info(f"🚀 Starting pipeline: {pipeline_path}")
             runner = PipelineRunner(config["pipeline"])
             runner.run()
 
@@ -39,7 +40,7 @@ class Platform:
         if not EventTriggerClass:
             raise ValueError(f"Event trigger '{event_type}' not registered")
 
-        logging.info(f"📡 Event listener detected: {event_type} → registered...")
+        logger.info(f"📡 Event listener detected: {event_type} → registered...")
 
         def run_listener():
             listener = EventTriggerClass(config=event_config, pipeline_path=pipeline_path)
@@ -56,10 +57,10 @@ class Platform:
         if not SchedulerClass:
             raise ValueError(f"Scheduler '{scheduler_type}' not registered")
 
-        logging.info(f"⏱️ Scheduler detected: {scheduler_type} → registered...")
+        logger.info(f"⏱️ Scheduler detected: {scheduler_type} → registered...")
         scheduler_instance = SchedulerClass(config=scheduler_config, pipeline_path=pipeline_path)
         scheduler_instance.register(self.scheduler)
 
     def start(self):
-        logging.info("🔁 Starting...")
+        logger.info("🔁 Starting...")
         self.scheduler.start()

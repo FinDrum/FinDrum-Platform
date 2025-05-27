@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
-
 import logging
-
+logger = logging.getLogger("findrum")
 from findrum.engine.PipelineRunner import PipelineRunner
 
 class Scheduler(ABC):
@@ -11,9 +10,9 @@ class Scheduler(ABC):
 
     @abstractmethod
     def register(self, scheduler):
-        pass
-    
+        raise NotImplementedError("Subclasses must implement 'register' method.") # pragma: no cover
+
     def _run_pipeline(self):
-        logging.info(f"🕒 Executing pipeline from {self.pipeline_path}")
+        logger.info(f"🕒 Executing pipeline from {self.pipeline_path}")
         runner = PipelineRunner.from_yaml(self.pipeline_path)
         runner.run()

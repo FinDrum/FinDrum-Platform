@@ -1,7 +1,8 @@
 import yaml
 import logging
+logger = logging.getLogger("findrum")
 from datetime import datetime
-from findrum.registry.Registry import get_operator
+from findrum.registry.Registry import get_operator, get_datasource
 
 class PipelineRunner:
     def __init__(self, pipeline_def):
@@ -15,8 +16,9 @@ class PipelineRunner:
 
     def run(self):
         for step in self.pipeline_def:
-            id = step["id"]
-            operator = step["operator"]
+            step_id = step["id"]
+            operator = step.get("operator")
+            datasource = step.get("datasource")
             depends_on = step.get("depends_on")
             params = step.get("params", {})
 
@@ -26,13 +28,21 @@ class PipelineRunner:
 
             input_data = self.results.get(depends_on) if depends_on else None
 
-            OperatorClass = get_operator(operator)
-            operator = OperatorClass(**resolved_params)
-
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            logging.info(f"[{timestamp}] → Excuting step: {id}")
+            logger.info(f"[{timestamp}] → Executing step: {step_id}")
 
-            self.results[id] = operator.run(input_data)
+            if operator:
+                OperatorClass = get_operator(operator)
+                instance = OperatorClass(**resolved_params)
+                self.results[step_id] = instance.run(input_data)
+            elif datasource:
+                if depends_on:
+                    raise ValueError("Datasource step cannot depend on another step.")
+                DataSourceClass = get_datasource(datasource)
+                instance = DataSourceClass(**resolved_params)
+                self.results[step_id] = instance.fetch()
+            else:
+                raise ValueError(f"Step '{step_id}' must have either 'operator' or 'datasource'.")
 
         return self.results
 

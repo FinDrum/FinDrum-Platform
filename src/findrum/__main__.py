@@ -3,6 +3,7 @@ import argparse
 import sys
 import os
 import logging
+logger = logging.getLogger("findrum")
 
 user_root = os.getcwd()
 if user_root not in sys.path:
@@ -17,11 +18,15 @@ def main():
     args = parser.parse_args()
 
     if args.verbose:
-        logging.basicConfig(
-            level=logging.INFO,
-            format="%(asctime)s | [%(levelname)s] | %(message)s",
-        )
+        logger.setLevel(logging.INFO)
+        handler = logging.StreamHandler()
+        handler.setFormatter(logging.Formatter("%(asctime)s | [%(levelname)s] | %(message)s"))
+        logger.addHandler(handler)
+        logger.propagate = False
+        logger.info("Verbose logging enabled.")
 
     platform = Platform(args.config)
     platform.register_pipeline(args.pipeline)
-    platform.start()
+
+    if platform.scheduler.get_jobs():
+        platform.start()

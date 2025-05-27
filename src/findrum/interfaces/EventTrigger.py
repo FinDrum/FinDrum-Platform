@@ -1,4 +1,7 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
+import logging
+logger = logging.getLogger("findrum")
 from findrum.engine.PipelineRunner import PipelineRunner
 
 class EventTrigger(ABC):
@@ -8,15 +11,10 @@ class EventTrigger(ABC):
 
     @abstractmethod
     def start(self):
-        pass
+        raise NotImplementedError("Subclasses must implement 'start' method.") # pragma: no cover
 
     def _run_pipeline(self, overrides: dict = None):
-        """Internal method for executing the pipeline with optional overrides."""
-        from datetime import datetime
-        import logging
-
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        logging.info(f"[{timestamp}] 📡 Executing pipeline from {self.pipeline_path}")
+        logger.info(f"📡 Executing pipeline from {self.pipeline_path}")
 
         runner = PipelineRunner.from_yaml(self.pipeline_path)
         if overrides:

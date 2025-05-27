@@ -6,4 +6,4 @@ class Operator(ABC):
 
     @abstractmethod
     def run(self, input_data):
-        pass
+        raise NotImplementedError("Subclasses must implement 'run' method.") # pragma: no cover
