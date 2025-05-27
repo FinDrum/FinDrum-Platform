@@ -2,7 +2,7 @@
 
 This is a minimal working example to demonstrate how to run a pipeline using [FinDrum](https://github.com/FinDrum/findrum-platform).
 
-## 🗂️ Contents
+## Contents
 
 ```
 my_project/
@@ -12,11 +12,11 @@ my_project/
 └── sample_pipeline.yaml   # The pipeline definition
 ```
 
-## 🚀 How to Run
+## How to Run
 
 You can execute this pipeline from different directories:
 
-### ✅ Option 1: From `examples/`
+### Option 1: From `examples/`
 
 This is the recommended way for trying the example directly:
 
@@ -39,7 +39,7 @@ datasources:
 
 ---
 
-### ⚠️ Option 2: From within `my_project/`
+### Option 2: From within `my_project/`
 
 You **can** also run it from here, but Python module resolution will behave differently:
 
@@ -64,7 +64,7 @@ Alternatively, modify your `PYTHONPATH` or `sys.path` manually, but this is less
 
 ---
 
-## 🧩 Notes
+## Notes
 
 - This project is **not the required structure** — it’s just an example.
 - You are free to structure your real projects however you want.
