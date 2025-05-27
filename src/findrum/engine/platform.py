@@ -60,7 +60,10 @@ class Platform:
         logger.info(f"⏱️ Scheduler detected: {scheduler_type} → registered...")
         scheduler_instance = SchedulerClass(config=scheduler_config, pipeline_path=pipeline_path)
         scheduler_instance.register(self.scheduler)
-
+    
     def start(self):
-        logger.info("🔁 Starting...")
-        self.scheduler.start()
+        if self.scheduler.get_jobs():
+            logger.info("🔁 Starting scheduler...")
+            self.scheduler.start()
+        else:
+            logger.info("✅ No scheduled jobs to run.")

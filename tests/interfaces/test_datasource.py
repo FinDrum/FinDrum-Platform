@@ -38,5 +38,5 @@ def test_datasource_with_depends_on_should_fail():
         {"id": "step1", "datasource": "dummy", "depends_on": "something"}
     ]
     runner = PipelineRunner(pipeline_def)
-    with pytest.raises(ValueError, match="Datasource step cannot depend on another step."):
+    with pytest.raises(ValueError, match="Datasource step 'step1' cannot depend on another step."):
         runner.run()
