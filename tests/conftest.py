@@ -1,6 +1,6 @@
 import pytest
 import yaml
-from findrum.registry import Registry
+from findrum.registry import registry
 
 class DummyOperator:
     def __init__(self, **params):
@@ -36,6 +36,6 @@ def dummy_pipeline_yaml(tmp_path):
 
 @pytest.fixture(autouse=True)
 def register_dummy_operator():
-    Registry.OPERATOR_REGISTRY["DummyOperator"] = DummyOperator
+    registry.OPERATOR_REGISTRY["DummyOperator"] = DummyOperator
     yield
-    Registry.OPERATOR_REGISTRY.clear()
+    registry.OPERATOR_REGISTRY.clear()

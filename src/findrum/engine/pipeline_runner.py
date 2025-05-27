@@ -2,7 +2,7 @@ import yaml
 import logging
 logger = logging.getLogger("findrum")
 from datetime import datetime
-from findrum.registry.Registry import get_operator, get_datasource
+from findrum.registry.registry import get_operator, get_datasource
 
 class PipelineRunner:
     def __init__(self, pipeline_def):

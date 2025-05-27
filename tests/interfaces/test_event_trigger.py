@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 import yaml
-from findrum.interfaces.EventTrigger import EventTrigger
+from findrum.interfaces.event_trigger import EventTrigger
 
 class IncompleteEventTrigger(EventTrigger):
     pass
@@ -23,7 +23,7 @@ class DummyTrigger(EventTrigger):
     def start(self):
         pass
 
-@patch("findrum.interfaces.EventTrigger.PipelineRunner")
+@patch("findrum.interfaces.event_trigger.PipelineRunner")
 def test_event_trigger_run_pipeline(mock_runner_class, tmp_path):
     dummy_yaml = tmp_path / "dummy.yaml"
     dummy_yaml.write_text(yaml.dump({"pipeline": []}))

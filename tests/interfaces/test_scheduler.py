@@ -1,7 +1,7 @@
 import pytest
 import yaml
 from unittest.mock import patch, MagicMock
-from findrum.interfaces.Scheduler import Scheduler
+from findrum.interfaces.scheduler import Scheduler
 
 class IncompleteScheduler(Scheduler):
     pass
@@ -23,7 +23,7 @@ class DummyScheduler(Scheduler):
     def register(self, scheduler):
         pass
 
-@patch("findrum.interfaces.Scheduler.PipelineRunner")
+@patch("findrum.interfaces.scheduler.PipelineRunner")
 def test_scheduler_run_pipeline(mock_runner_class, tmp_path):
     dummy_yaml = tmp_path / "dummy.yaml"
     dummy_yaml.write_text(yaml.dump({"pipeline": []}))

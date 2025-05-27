@@ -1,13 +1,13 @@
 import yaml
 import importlib
 
-from findrum.registry import Registry
+from findrum.registry import registry
 
 CATEGORY_REGISTRY_MAP = {
-    "operators": Registry.OPERATOR_REGISTRY,
-    "schedulers": Registry.SCHEDULER_REGISTRY,
-    "triggers": Registry.EVENT_TRIGGER_REGISTRY,
-    "datasources": Registry.DATASOURCE_REGISTRY,
+    "operators": registry.OPERATOR_REGISTRY,
+    "schedulers": registry.SCHEDULER_REGISTRY,
+    "triggers": registry.EVENT_TRIGGER_REGISTRY,
+    "datasources": registry.DATASOURCE_REGISTRY,
 }
 
 def load_extensions(config_path: str):

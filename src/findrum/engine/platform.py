@@ -6,8 +6,8 @@ import threading
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 from findrum.loader.load_extensions import load_extensions
-from findrum.engine.PipelineRunner import PipelineRunner
-from findrum.registry.Registry import EVENT_TRIGGER_REGISTRY, SCHEDULER_REGISTRY
+from findrum.engine.pipeline_runner import PipelineRunner
+from findrum.registry.registry import EVENT_TRIGGER_REGISTRY, SCHEDULER_REGISTRY
 
 
 class Platform:
