@@ -1,0 +1,10 @@
+pipeline:
+  - id: step1
+    operator: DummyOperator
+    params:
+      x: 1
+  - id: step2
+    operator: DummyOperator
+    depends_on: step1
+    params:
+      y: 2
