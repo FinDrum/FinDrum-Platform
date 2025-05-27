@@ -1,5 +1,5 @@
 [project]
-name = "findrum"
+name = "findrum-platform"
 version = "0.1.0"
 description = "Framework for building modular, event-driven data pipelines"
 authors = [
@@ -12,6 +12,12 @@ dependencies = [
   "pandas==2.2.3",
   "PyYAML==6.0.2",
   "python-dateutil==2.9.0.post0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "pytest-cov"
 ]
 
 [build-system]
