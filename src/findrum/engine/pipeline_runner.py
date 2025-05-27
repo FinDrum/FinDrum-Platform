@@ -24,7 +24,7 @@ class PipelineRunner:
             params = step.get("params", {})
             
             step_overrides = self.param_overrides.get(step_id, {})
-            resolved_params = {k: step_overrides.get(k, v) for k, v in params.items()}
+            resolved_params = {str(k): step_overrides.get(k, v) for k, v in params.items()}
 
             if isinstance(depends_on, list):
                 input_data = [self.results.get(dep) for dep in depends_on]
