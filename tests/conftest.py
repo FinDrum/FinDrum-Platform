@@ -2,12 +2,21 @@ import pytest
 import yaml
 from findrum.registry import registry
 
-class DummyOperator:
-    def __init__(self, **params):
-        self.params = params
+class ConstOperator:
+    def __init__(self, value):
+        self.value = value
 
     def run(self, input_data):
-        return {"params": self.params, "input": input_data}
+        print(self.value)
+        return self.value
+
+class AddOperator:
+    def __init__(self):
+        pass
+
+    def run(self, input_data):
+        print(input_data)
+        return sum(input_data)
 
 class DummyScheduler:
     def register(self, scheduler):
@@ -25,8 +34,9 @@ class DummyDataSource:
 def dummy_pipeline_yaml(tmp_path):
     data = {
         "pipeline": [
-            {"id": "step1", "operator": "DummyOperator", "params": {"x": 1}},
-            {"id": "step2", "operator": "DummyOperator", "depends_on": "step1", "params": {"y": 2}},
+            {"id": "step1", "operator": "Const", "params": {"value": 2}},
+            {"id": "step2", "operator": "Const", "params": {"value": 3}},
+            {"id": "final", "operator": "Adder", "depends_on": ["step1", "step2"]}
         ]
     }
     path = tmp_path / "pipeline.yaml"
@@ -35,7 +45,8 @@ def dummy_pipeline_yaml(tmp_path):
     return str(path)
 
 @pytest.fixture(autouse=True)
-def register_dummy_operator():
-    registry.OPERATOR_REGISTRY["DummyOperator"] = DummyOperator
+def register_dummy_operators():
+    registry.OPERATOR_REGISTRY["Const"] = ConstOperator
+    registry.OPERATOR_REGISTRY["Adder"] = AddOperator
     yield
     registry.OPERATOR_REGISTRY.clear()

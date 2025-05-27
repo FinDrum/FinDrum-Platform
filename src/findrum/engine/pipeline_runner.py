@@ -1,8 +1,9 @@
 import yaml
 import logging
-logger = logging.getLogger("findrum")
 from datetime import datetime
 from findrum.registry.registry import get_operator, get_datasource
+
+logger = logging.getLogger("findrum")
 
 class PipelineRunner:
     def __init__(self, pipeline_def):
@@ -21,26 +22,27 @@ class PipelineRunner:
             datasource = step.get("datasource")
             depends_on = step.get("depends_on")
             params = step.get("params", {})
+            
+            step_overrides = self.param_overrides.get(step_id, {})
+            resolved_params = {k: step_overrides.get(k, v) for k, v in params.items()}
 
-            resolved_params = {
-                k: self.param_overrides.get(k, v) for k, v in params.items()
-            }
+            if isinstance(depends_on, list):
+                input_data = [self.results.get(dep) for dep in depends_on]
+            elif depends_on:
+                input_data = self.results.get(depends_on)
+            else:
+                input_data = None
 
-            input_data = self.results.get(depends_on) if depends_on else None
-
-            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            logger.info(f"[{timestamp}] → Executing step: {step_id}")
+            logger.info(f"[{datetime.now():%Y-%m-%d %H:%M:%S}] → Executing step: {step_id}")
 
             if operator:
                 OperatorClass = get_operator(operator)
-                instance = OperatorClass(**resolved_params)
-                self.results[step_id] = instance.run(input_data)
+                self.results[step_id] = OperatorClass(**resolved_params).run(input_data)
             elif datasource:
                 if depends_on:
-                    raise ValueError("Datasource step cannot depend on another step.")
+                    raise ValueError(f"Datasource step '{step_id}' cannot depend on another step.")
                 DataSourceClass = get_datasource(datasource)
-                instance = DataSourceClass(**resolved_params)
-                self.results[step_id] = instance.fetch()
+                self.results[step_id] = DataSourceClass(**resolved_params).fetch()
             else:
                 raise ValueError(f"Step '{step_id}' must have either 'operator' or 'datasource'.")
 

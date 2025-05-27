@@ -6,4 +6,4 @@ class DataSource(ABC):
 
     @abstractmethod
     def fetch(self):
-        raise NotImplementedError("Subclasses must implement 'fetch' method.") #pragma: no conver
+        raise NotImplementedError("Subclasses must implement 'fetch' method.") # pragma: no conver
