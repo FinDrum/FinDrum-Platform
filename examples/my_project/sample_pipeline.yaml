@@ -1,0 +1,11 @@
+pipeline:
+  - id: load_data
+    datasource: ExampleDataSource
+
+  - id: sum_values
+    operator: SumOperator
+    depends_on: load_data
+
+  - id: show_values
+    operator: Show
+    depends_on: sum_values

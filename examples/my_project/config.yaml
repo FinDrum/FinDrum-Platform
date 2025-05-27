@@ -1,0 +1,6 @@
+datasources:
+  - datasource.ExampleDataSource
+
+operators:
+  - my_operator.SumOperator
+  - my_operator.Show
