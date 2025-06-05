@@ -21,24 +21,47 @@ Findrum pipelines are defined in YAML files and can include:
 - A sequence of operators
 - A datasource (provides data from external source)
 - A scheduler (to run periodically)
-- An event trigger (to respond to changes)
+- An event trigger (to respond to real-time events)
 
-Example structure:
+## Example structures:
+
+### Example with `scheduler` and batch `datasource`:
 
 ```yaml
 scheduler:
   type: MyCustomScheduler
 
 pipeline:
-  - id: step1
+  - id: batch_ingest
     datasource: MyDataSource
     params:
       key: value
-  - id: step2
+
+  - id: transform
     operator: MyOperator
-    depends_on: step1
+    depends_on: batch_ingest
     params:
       key: value
+```
+
+### Example with `event` and `pipeline`
+
+```yaml
+event:
+  type: MyTrigger
+  config:
+    key: value
+
+pipeline:
+  - id: step1
+    operator: MyOperator
+    depends_on: MyTrigger
+    params:
+      key: value
+
+  - id: step2
+    operator: DownstreamOperator
+    depends_on: step1
 ```
 
 ---
@@ -101,7 +124,7 @@ class MyTrigger(EventTrigger):
         ...
 ```
 
-Runs the pipeline when a specific external event happens.
+Runs the pipeline when an **external event occurs** (e.g., new Kafka message, file in MinIO). The trigger should call `self.emit(data)` to push input into the pipeline.
 
 ---
 
