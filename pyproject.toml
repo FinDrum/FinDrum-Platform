@@ -1,6 +1,6 @@
 [project]
 name = "findrum-platform"
-version = "0.2.1"
+version = "1.0.0"
 description = "Framework for building modular, event-driven data pipelines"
 authors = [
   { name = "Óscar", email = "oscar.rico101@alu.ulpgc.es" }
