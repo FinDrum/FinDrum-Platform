@@ -23,31 +23,12 @@ class Platform:
         with open(pipeline_path) as f:
             config = yaml.safe_load(f)
 
-        if "event" in config:
-            self._start_event_listener(config["event"], pipeline_path)
-        elif "scheduler" in config:
+        if "scheduler" in config:
             self._register_scheduler(config["scheduler"], pipeline_path)
         else:
             logger.info(f"🚀 Starting pipeline: {pipeline_path}")
-            runner = PipelineRunner(config["pipeline"])
+            runner = PipelineRunner(config)
             runner.run()
-
-    def _start_event_listener(self, event_block, pipeline_path):
-        event_type = event_block.get("type")
-        event_config = event_block.get("config", {})
-
-        EventTriggerClass = EVENT_TRIGGER_REGISTRY.get(event_type)
-        if not EventTriggerClass:
-            raise ValueError(f"Event trigger '{event_type}' not registered")
-
-        logger.info(f"📡 Event listener detected: {event_type} → registered...")
-
-        def run_listener():
-            listener = EventTriggerClass(config=event_config, pipeline_path=pipeline_path)
-            listener.start()
-
-        thread = threading.Thread(target=run_listener, daemon=True)
-        thread.start()
 
     def _register_scheduler(self, scheduler_block, pipeline_path):
         scheduler_type = scheduler_block.get("type")
