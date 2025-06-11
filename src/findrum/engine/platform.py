@@ -1,19 +1,20 @@
 import yaml
 import os
 import logging
+import time
 logger = logging.getLogger("findrum")
-import threading
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 from findrum.loader.load_extensions import load_extensions
 from findrum.engine.pipeline_runner import PipelineRunner
-from findrum.registry.registry import EVENT_TRIGGER_REGISTRY, SCHEDULER_REGISTRY
+from findrum.registry.registry import SCHEDULER_REGISTRY
 
 
 class Platform:
     def __init__(self, extensions_config: str = "config.yaml"):
         self.extensions_config = extensions_config
         self.scheduler = BlockingScheduler()
+        self.has_event_triggers = False
         load_extensions(self.extensions_config)
 
     def register_pipeline(self, pipeline_path: str):
@@ -22,6 +23,9 @@ class Platform:
 
         with open(pipeline_path) as f:
             config = yaml.safe_load(f)
+
+        if "event" in config:
+            self.has_event_triggers = True
 
         if "scheduler" in config:
             self._register_scheduler(config["scheduler"], pipeline_path)
@@ -46,5 +50,12 @@ class Platform:
         if self.scheduler.get_jobs():
             logger.info("🔁 Starting scheduler...")
             self.scheduler.start()
+        elif self.has_event_triggers:
+            logger.info("🟢 Event triggers detectados. Manteniendo proceso activo...")
+            try:
+                while True:
+                    time.sleep(60)
+            except KeyboardInterrupt:
+                logger.info("⛔ Interrupción recibida. Saliendo.")
         else:
-            logger.info("✅ No scheduled jobs to run.")
+            logger.info("✅ No hay schedulers ni triggers activos. Finalizando.")
