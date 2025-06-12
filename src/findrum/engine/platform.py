@@ -10,7 +10,7 @@ from findrum.engine.pipeline_runner import PipelineRunner
 from findrum.registry.registry import SCHEDULER_REGISTRY
 
 class Platform:
-    def __init__(self, extensions_config: str = "config.yaml", verbose: bool = False):
+    def __init__(self, extensions_config: str = "config.yaml", verbose: bool = False, verbose: bool = False):
         self.extensions_config = extensions_config
         self.scheduler = BlockingScheduler()
         self.has_event_triggers = False
@@ -35,13 +35,16 @@ class Platform:
         if "event" in config:
             self.has_event_triggers = True
             logger.info(f"🔔 Event trigger detected in: {pipeline_path}")
-
-        if "scheduler" in config:
-            self._register_scheduler(config["scheduler"], pipeline_path)
-        elif "event" not in config:
-            logger.info(f"🚀 Running unscheduled pipeline: {pipeline_path}")
             runner = PipelineRunner(config)
             runner.run()
+            return
+        elif "scheduler" in config:
+            self._register_scheduler(config["scheduler"], pipeline_path)
+            return
+        
+        logger.info(f"🚀 Running unscheduled pipeline: {pipeline_path}")
+        runner = PipelineRunner(config)
+        runner.run()
 
     def _register_scheduler(self, scheduler_block, pipeline_path):
         scheduler_type = scheduler_block.get("type")
