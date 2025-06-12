@@ -35,13 +35,16 @@ class Platform:
         if "event" in config:
             self.has_event_triggers = True
             logger.info(f"🔔 Event trigger detected in: {pipeline_path}")
-
-        if "scheduler" in config:
-            self._register_scheduler(config["scheduler"], pipeline_path)
-        elif "event" not in config:
-            logger.info(f"🚀 Running unscheduled pipeline: {pipeline_path}")
             runner = PipelineRunner(config)
             runner.run()
+            return
+        elif "scheduler" in config:
+            self._register_scheduler(config["scheduler"], pipeline_path)
+            return
+        
+        logger.info(f"🚀 Running unscheduled pipeline: {pipeline_path}")
+        runner = PipelineRunner(config)
+        runner.run()
 
     def _register_scheduler(self, scheduler_block, pipeline_path):
         scheduler_type = scheduler_block.get("type")
