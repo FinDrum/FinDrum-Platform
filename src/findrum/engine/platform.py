@@ -23,15 +23,6 @@ class Platform:
             logger.addHandler(handler)
             logger.propagate = False
             logger.info("Verbose mode enabled.")
-        self.verbose = verbose
-
-        if self.verbose:
-            logger.setLevel(logging.INFO)
-            handler = logging.StreamHandler()
-            handler.setFormatter(logging.Formatter("%(asctime)s | [%(levelname)s] | %(message)s"))
-            logger.addHandler(handler)
-            logger.propagate = False
-            logger.info("Verbose mode enabled.")
         load_extensions(self.extensions_config)
 
     def register_pipeline(self, pipeline_path: str):
