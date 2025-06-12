@@ -9,12 +9,20 @@ from findrum.loader.load_extensions import load_extensions
 from findrum.engine.pipeline_runner import PipelineRunner
 from findrum.registry.registry import SCHEDULER_REGISTRY
 
-
 class Platform:
-    def __init__(self, extensions_config: str = "config.yaml"):
+    def __init__(self, extensions_config: str = "config.yaml", verbose: bool = False):
         self.extensions_config = extensions_config
         self.scheduler = BlockingScheduler()
         self.has_event_triggers = False
+        self.verbose = verbose
+
+        if self.verbose:
+            logger.setLevel(logging.INFO)
+            handler = logging.StreamHandler()
+            handler.setFormatter(logging.Formatter("%(asctime)s | [%(levelname)s] | %(message)s"))
+            logger.addHandler(handler)
+            logger.propagate = False
+            logger.info("Verbose mode enabled.")
         load_extensions(self.extensions_config)
 
     def register_pipeline(self, pipeline_path: str):
@@ -26,11 +34,12 @@ class Platform:
 
         if "event" in config:
             self.has_event_triggers = True
+            logger.info(f"🔔 Event trigger detected in: {pipeline_path}")
 
         if "scheduler" in config:
             self._register_scheduler(config["scheduler"], pipeline_path)
-        else:
-            logger.info(f"🚀 Starting pipeline: {pipeline_path}")
+        elif "event" not in config:
+            logger.info(f"🚀 Running unscheduled pipeline: {pipeline_path}")
             runner = PipelineRunner(config)
             runner.run()
 
@@ -47,7 +56,10 @@ class Platform:
         scheduler_instance.register(self.scheduler)
     
     def start(self):
-        if self.scheduler.get_jobs():
+        jobs = self.scheduler.get_jobs()
+        logger.info(f"📋 Scheduler jobs found: {len(jobs)}")
+
+        if jobs:
             logger.info("🔁 Starting scheduler...")
             self.scheduler.start()
         elif self.has_event_triggers:
