@@ -14,7 +14,7 @@ logger = logging.getLogger("findrum")
 
 
 class Platform:
-    def __init__(self, extensions_config: str = "config.yaml", verbose: bool = False, verbose: bool = False):
+    def __init__(self, extensions_config: str = "config.yaml", verbose: bool = False):
         self.extensions_config = extensions_config
         self.verbose = verbose
         self.scheduler = BlockingScheduler()
