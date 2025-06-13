@@ -105,10 +105,11 @@ class Platform:
             logger.info("🔁 Starting scheduler...")
             self.scheduler.start()
         elif self.event_instances:
-            logger.info("🟢 Event triggers detectados. Manteniendo proceso activo...")
+            logger.info("🟢 Event triggers detected. Keeping process alive...")
             try:
                 while True:
                     time.sleep(60)
             except KeyboardInterrupt:
-                logger.info("⛔ Interrupción recibida. Saliendo.")
-        logger.info("✅ No hay schedulers ni triggers activos. Finalizando.")
+                logger.info("⛔ Interrupt received. Exiting.")
+
+        logger.info("✅ No active schedulers or triggers. Shutting down.")
