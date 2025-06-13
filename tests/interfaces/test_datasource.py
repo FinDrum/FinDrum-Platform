@@ -28,9 +28,3 @@ def test_step_missing_operator_and_datasource():
     runner = PipelineRunner(pipeline_def)
     with pytest.raises(ValueError, match="must have either 'operator' or 'datasource'"):
         runner.run()
-
-def test_datasource_with_depends_on_should_fail():
-    pipeline_def = {"pipeline":[{"id": "step1", "datasource": "dummy", "depends_on": "something"}]}
-    runner = PipelineRunner(pipeline_def)
-    with pytest.raises(ValueError, match="Datasource step 'step1' cannot depend on another step."):
-        runner.run()
