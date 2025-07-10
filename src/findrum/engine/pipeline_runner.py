@@ -147,6 +147,9 @@ class PipelineRunner:
         Returns:
             dict: Results from all executed steps.
         """
+        return self.results
+
+    def run_with_data(self, data):
         self._execute_pipeline_with_data(data)
         return self.results
 

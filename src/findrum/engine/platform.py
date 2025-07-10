@@ -75,7 +75,7 @@ class Platform:
             self._register_scheduler(config["scheduler"], pipeline_path)
             return
 
-        logger.info(f"🚀 Running unscheduled pipeline: {pipeline_path}")
+        logger.info(f"Running unscheduled pipeline: {pipeline_path}")
         runner.run()
 
     def _register_event_pipeline(self, event_def: dict, runner: PipelineRunner, pipeline_path: str):
@@ -148,21 +148,21 @@ class Platform:
         waiting for events.
         """
         jobs = self.scheduler.get_jobs()
-        logger.info(f"📋 Scheduler jobs found: {len(jobs)}")
+        logger.info(f"Scheduler jobs found: {len(jobs)}")
 
         for trigger in self.event_instances.values():
-            logger.info(f"🟢 Starting trigger: {trigger.__class__.__name__}")
+            logger.info(f"Starting trigger: {trigger.__class__.__name__}")
             trigger.start()
 
         if jobs:
             logger.info("🔁 Starting scheduler...")
             self.scheduler.start()
         elif self.event_instances:
-            logger.info("🟢 Event triggers detected. Keeping process alive...")
+            logger.info("Event triggers detected. Keeping process alive...")
             try:
                 while True:
                     time.sleep(60)
             except KeyboardInterrupt:
-                logger.info("⛔ Interrupt received. Exiting.")
+                logger.info("Interrupt received. Exiting.")
 
-        logger.info("✅ No active schedulers or triggers. Shutting down.")
+        logger.info("No active schedulers or triggers. Shutting down.")
